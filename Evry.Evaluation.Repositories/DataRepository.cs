@@ -49,7 +49,7 @@ namespace Evry.Evaluation.Repositories
         public IEnumerable<Event> GetEventsByDateRange(DateTime start, DateTime end)
         {
             // EVAL
-            throw new NotImplementedException();
+            return _session.Set<Event>().Where(e => e.Time > start && e.Time < end);
         }
 
         /// <summary>
@@ -70,7 +70,14 @@ namespace Evry.Evaluation.Repositories
         public IEnumerable<Event> GetEventsByRegion(Guid regionId)
         {
             // EVAL
-            throw new NotImplementedException();
+            List<Person> filteredpersonlist = _session.Set<Person>().Where(x => x.RegionID == regionId).ToList();
+            List<Guid> filteredpersonids = null;
+            foreach(Person person in filteredpersonlist)
+            {
+                filteredpersonids.Add(person.ID);
+            }
+
+            return _session.Set<Event>().Where(e => filteredpersonids.Contains(e.PersonID));
         }
 
         /// <summary>
@@ -90,6 +97,14 @@ namespace Evry.Evaluation.Repositories
         public IEnumerable<EventType> GetEventTypes()
         {
             return _session.Set<EventType>();
+        }
+        /// <summary>
+        /// Get all event types
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<EventType> GetEventTypebyId(Guid typeId)
+        {
+            return _session.Set<EventType>().Where (e=>e.ID == typeId);
         }
 
         /// <summary>
@@ -117,8 +132,17 @@ namespace Evry.Evaluation.Repositories
         /// <returns></returns>
         public IEnumerable<Region> GetRegions()
         {
-            // EVAL
-            throw new NotImplementedException();
+            return _session.Set<Region>();
+        }
+
+        /// <summary>
+        /// Get region by ID
+        /// </summary>
+        /// /// <param name="regionId"></param>
+        /// <returns>Region</returns>
+        public Region GetRegionById(Guid regionId)
+        {
+            return _session.Set<Region>().Where(r=>r.ID == regionId).FirstOrDefault();
         }
 
         #region IDisposable Support

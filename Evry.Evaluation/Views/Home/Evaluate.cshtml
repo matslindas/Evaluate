@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Evaluae";
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <br />
+    <div class="col-md-8">
+        <input type="button" value="Process" onclick="location.href='@Url.Action("List", "Home")'" />
+    </div>
+    <br />
+    <br />
+    <div class="col-md-8">
+        <input type="button" value="Tillbaka" onclick="location.href='@Url.Action("index", "Home")'" />
+    </div>
+
+</body>
+</html>

@@ -28,15 +28,21 @@ namespace Evry.Evaluation.BusinessLogic
             switch (periodClass)
             {
                 case PeriodClass.Week:
-                    currentStart = DateTime.Now.AddDays(((int)DateTime.Now.DayOfWeek -1) * -1);
+                    currentStart = DateTime.Now.AddDays(((int)DateTime.Now.DayOfWeek - 1) * -1);
                     // EVAL: Get end of week
+                    currentEnd = DateTime.Now.AddDays(7 - (int)DateTime.Now.DayOfWeek);
                     break;
                 case PeriodClass.Month:
                     currentStart = DateTime.Now.AddDays((DateTime.Now.Day - 1) * -1);
-                    currentEnd = new DateTime(DateTime.Now.Year, DateTime.Now.Month+1, 1).AddDays(-1);
+                    currentEnd = new DateTime(DateTime.Now.Year, DateTime.Now.Month + 1, 1).AddDays(-1);
                     break;
                 case PeriodClass.Quarter:
                     // EVAL
+
+                    DateTime now = DateTime.Now;
+                    int currQuarter = (now.Month - 1) / 3 + 1;
+                    currentStart = new DateTime(now.Year, 3 * currQuarter - 2, 1);
+                    currentEnd = new DateTime(now.Year, 3 * currQuarter + 1, 1).AddDays(-1);
                     break;
                 case PeriodClass.Year:
                     currentStart = new DateTime(DateTime.Now.Year, 1, 1);
@@ -50,10 +56,12 @@ namespace Evry.Evaluation.BusinessLogic
             {
                 var personResult = new ProcessedPersonResult();
                 // EVAL: Fill personal details
+                personResult.PersonID = person;
 
                 var takeCurrent = new List<int>();
                 var takePrevious = new List<int>();
                 var takeNext = new List<int>();
+                Dictionary<PeriodType, double> tmpPeriodTotals = new Dictionary<PeriodType, double>();
 
                 for (var i = 0; i < events.Count(); i++)
                 {
@@ -95,7 +103,8 @@ namespace Evry.Evaluation.BusinessLogic
                         }
                     }
                 }
-                personResult.PeriodTotals.Add(PeriodType.Current, currentTotal);
+
+                tmpPeriodTotals.Add(PeriodType.Current, currentTotal);
 
                 var prevTotal = 0d;
                 for (var i = 0; i < takePrevious.Count; i++)
@@ -118,7 +127,7 @@ namespace Evry.Evaluation.BusinessLogic
                         }
                     }
                 }
-                personResult.PeriodTotals.Add(PeriodType.Previous, prevTotal);
+                tmpPeriodTotals.Add(PeriodType.Previous, prevTotal);
 
                 var nextTotal = 0d;
                 for (var i = 0; i < takeNext.Count; i++)
@@ -141,7 +150,11 @@ namespace Evry.Evaluation.BusinessLogic
                         }
                     }
                 }
-                personResult.PeriodTotals.Add(PeriodType.Next, nextTotal);
+                tmpPeriodTotals.Add(PeriodType.Next, nextTotal);
+
+                personResult.PeriodTotals = tmpPeriodTotals;
+                personResult.GrandTotal = prevTotal +currentTotal +nextTotal ;
+                result.Add(personResult);
             });
 
             return result;

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Evry.Evaluation.BusinessLogic;
 
 namespace Evry.Evaluation.Controllers
 {
@@ -21,6 +22,10 @@ namespace Evry.Evaluation.Controllers
             var manager = new EventManager();
             model = manager.GetEventList();
             return View(model);
+        }
+        public ActionResult Evaluate()
+        {
+            return View();
         }
     }
 }

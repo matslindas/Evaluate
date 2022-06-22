@@ -198,6 +198,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\List.cshtml" />
+    <Content Include="Views\Home\Evaluate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -216,6 +217,10 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Evry.Evaluation.BusinessLogic\Evry.Evaluation.BusinessLogic.csproj">
+      <Project>{0b44b8b7-7a9f-4072-9880-af7640e133ff}</Project>
+      <Name>Evry.Evaluation.BusinessLogic</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Evry.Evaluation.Interfaces\Evry.Evaluation.Interfaces.csproj">
       <Project>{69928A76-DDBD-4A61-994A-6844D73832CE}</Project>
       <Name>Evry.Evaluation.Interfaces</Name>
